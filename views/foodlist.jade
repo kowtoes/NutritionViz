@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1.
+        Food List
+    form#formFilter(name="filter", method="get", action="/")
+
+    ul
+        each food, i in foodlist
+                if i < 100
+                    li
+                        p= food.Short_Desc
