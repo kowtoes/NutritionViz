@@ -3,8 +3,13 @@ extends layout
 block content
     h1.
         Food List
-    form#formFilter(name="filter", method="get", action="/")
-
+    form#formFilter(name="form-filter", method="get", action="/foodlist/search")
+      div(data-role='fieldcontain')
+        fieldset(data-role='controlgroup')
+          label(for='Refine Search') Search by Food Name
+             input(id='email',type='text',value='',placeholder='query',name='filter')
+          div(data-role='fieldcontain')
+             input(type='submit',value='filter',data-transition='fade', data-theme='c')
     ul
         each food, i in foodlist
                 if i < 100

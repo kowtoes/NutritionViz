@@ -10,7 +10,7 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
 
-var mongoURI = 'mongodb://kowtoes:ookaooka123@ds053638.mongolab.com:53638/nutrition';
+var mongoURI = 'mongodb://adminUser:banana_purple_seven_trumpet@ds053638.mongolab.com:53638/nutrition';
 
 
 var routes = require('./routes/index');
