@@ -29,6 +29,31 @@ router.get('/foodlist/search', function(req, res, next) {
 });
 
 
+//uses url as filter and category to filter
+router.get('/foodlist/:category/:filter', function(req, res, next) {
+    var db = req.db;
+    console.log(req.params.filter);
+    console.log(req.params.category);
+    var collection = db.collection('nut');
+    //concatenation forces the req.params.filter to resolve before the where
+    foodItem.find({ $where: "this."+req.params.category
+        +".indexOf('"+req.params.filter+"') > -1"}, function(e,docs){
+        console.log(e);
+        res.render('foodlist', {
+            "foodlist" : docs
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+
 //uses url as filter
 router.get('/foodlist/:filter', function(req, res, next) {
     var db = req.db;
