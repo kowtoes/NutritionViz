@@ -1,3 +1,4 @@
+//dependencies
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -6,13 +7,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var foodItems = require('./models/foodItem.js');
 
+//mongo combo
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-
-
 var mongoURI = 'mongodb://adminUser:banana_purple_seven_trumpet@ds053638.mongolab.com:53638/nutrition';
 
-
+//routing info
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -34,10 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-
+//establisj connection to mongolab
 mongoose.connect(mongoURI);
 var db = mongoose.connection;
-
+//pass db for future use
 app.use(function(req,res,next){
     req.db = db;
     next();
@@ -45,7 +45,7 @@ app.use(function(req,res,next){
 
 
 
-
+//start routing
 app.use('/', routes);
 app.use('/users', users);
 

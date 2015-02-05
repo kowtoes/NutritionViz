@@ -20,6 +20,7 @@ router.get('/foodlist/search', function(req, res, next) {
     console.log(req);
     //concatenation forces the req.query.filter to resolve before the where
     //otherwise always returns false
+    //limits results to items which contain the query 
     foodItem.find({ $where: "this.Short_Desc.indexOf('"+req.query.filter.toUpperCase()+"') > -1"}, function(e,docs){
         console.log(e);
         res.render('foodlist', {
@@ -36,9 +37,11 @@ router.get('/foodlist/:category/:filter', function(req, res, next) {
     console.log(req.params.category);
     var collection = db.collection('nut');
     //concatenation forces the req.params.filter to resolve before the where
+    //filters items that fit into a specific category
     foodItem.find({ $where: "this."+req.params.category
         +".indexOf('"+req.params.filter+"') > -1"}, function(e,docs){
         console.log(e);
+        //send results to foodlist.jade
         res.render('foodlist', {
             "foodlist" : docs
         });
