@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var foodItems = require('./models/foodItem.js');
-
+var foodList = require('./routes/foodList')
 //mongo combo
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -14,7 +14,6 @@ var mongoURI = 'mongodb://adminUser:banana_purple_seven_trumpet@ds053638.mongola
 
 //routing info
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -47,7 +46,7 @@ app.use(function(req,res,next){
 
 //start routing
 app.use('/', routes);
-app.use('/users', users);
+app.use('/foodList', foodList);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
