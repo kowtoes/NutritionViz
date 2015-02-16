@@ -13,8 +13,8 @@ router.get('/', function(req, res, next) {
 router.get('/foodlist', function(req, res) {
     var db = req.db;
     var collection = db.collection('nut');
-
-    foodItem.find({},function(e,docs){
+    console.log("main foodlist get");
+    foodItem.find( {}, { _id: 0},function(e,docs){
 
         res.render('foodlist', {
             "foodlist" : docs

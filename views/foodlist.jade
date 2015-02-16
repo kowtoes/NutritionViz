@@ -1,6 +1,7 @@
 extends layout
 
 block content
+
     h1.
         Food List
     div
@@ -25,3 +26,76 @@ block content
         li: a(href='/foodlist/Chocolate') Chocolate
         li: a(href='/foodlist/Milk') Milk
         li: a(href='/foodlist/Cheese') Cheese
+    svg.chart
+    script(src="http://d3js.org/d3.v3.min.js")
+    script.
+      //get json from jade
+      var foodList = [#{foodlist}];
+      //number based categorys from json, besides NDB_No, 27 entries
+      var xAxisLabels = ["Water","Energ_Kcal", "Protein", "Tot_Lipid", "Carbohydrt", "Fiber_TD", "Ash",
+      "Calcium", "Phosphorus", "Iron", "Sodium", "Potassium", "Magnesium", "Zinc", "Copper", "Vit_A", "Vit_E",
+      "Thiamin", "Riboflavin", "Niacin", "Vit_C", "FA_Sat","FA_Mono","FA_Poly", "Cholestrl", "GmWt_1", "Refuse_Pct"];
+      // 28 entries total
+      var yvalues = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      //iterate through each nutritional food item
+      for (item in foodList) {
+        var x = 0;
+        //visit each category of a particular item
+        for (property in foodList[JSON.parse(item)]) {
+          //only want to iterate over the properties we created that are numbers
+          if (foodList[JSON.parse(item)].hasOwnProperty(property) && typeof foodList[item][property] === "number") {
+            yvalues[x] += foodList[item][property];
+            x++;
+          }
+        }
+        //reset array index
+        x %= 28;
+      }
+      //compute the average of each category
+      var topLevelAverages= [54.26628514056221, 226.58155639223563, 11.631261546184765, 11.024045682730897,
+      20.937067938420306, 1.8692039825970563, 1.967626338688084, 69.31775585676036,
+      157.94124364123158, 2.667693775100392, 378.637108266399, 289.4174963186078,
+      36.30392402945113, 2.0046306894243644, 0.19614457831325344, 751.0974263721553,
+      0.7662387884872838, 0.20384605087014906, 0.22751221552877962, 3.000475736278444,
+      9.363419344042788, 3.5725011713520805, 4.297347556894269, 2.0274335676037465,
+      41.80646084337349, 155.8459002677344, 5.924866131191433]
+      var averagesRaw = [];
+      for(var y = 0; y < yvalues.length; y++) {
+        averagesRaw.push(yvalues[y] / foodList.length);
+      }
+      //remove NDB_No from array
+      averagesRaw = averagesRaw.slice(1);
+      var relativeAveragesFullSet = [];
+      for(var y = 0; y < averagesRaw.length; y++) {
+        relativeAveragesFullSet.push(averagesRaw[y] / topLevelAverages[y]);
+      }
+      console.log(averagesRaw);
+      var margin = {top: 20, right: 20, bottom: 30, left: 40},
+      width = 960 - margin.left - margin.right,
+      height = 900 - margin.top - margin.bottom;
+
+
+          barHeight = 20;
+
+      var x = d3.scale.linear()
+          .domain([0, d3.max(relativeAveragesFullSet)])
+          .range([0, width]);
+
+      var chart = d3.select(".chart")
+          .attr("width", width)
+          .attr("height", height);
+
+      var bar = chart.selectAll("g")
+          .data(relativeAveragesFullSet)
+        .enter().append("g")
+          .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
+
+      bar.append("rect")
+          .attr("width", x)
+          .attr("height", barHeight - 1);
+
+      bar.append("text")
+          .attr("x", function(d) { return x(d) - 3; })
+          .attr("y", barHeight / 2)
+          .attr("dy", ".35em")
+          .text(function(d) { return d; });
