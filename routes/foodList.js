@@ -12,7 +12,7 @@ router.get('/search', function(req, res, next) {
     //concatenation forces the req.query.filter to resolve before the where
     //otherwise always returns false
     //limits results to items which contain the query
-    foodItem.find({ $where: "this.Short_Desc.indexOf('"+req.query.filter.toUpperCase()+"') > -1"}, function(e,docs){
+    foodItem.find({ $where: "this.Short_Desc.indexOf('"+req.query.filter.toUpperCase()+"') > -1"}, { _id: 0}, function(e,docs){
         console.log(e);
         res.render('foodlist', {
             "foodlist" : docs
@@ -30,7 +30,7 @@ router.get('/:category/:filter', function(req, res, next) {
     //concatenation forces the req.params.filter to resolve before the where
     //filters items that fit into a specific category
     foodItem.find({ $where: "this."+req.params.category
-        +".indexOf('"+req.params.filter+"') > -1"}, function(e,docs){
+        +".indexOf('"+req.params.filter+"') > -1"}, { _id: 0}, function(e,docs){
         console.log(e);
         //send results to foodlist.jade
         res.render('foodlist', {
@@ -41,11 +41,10 @@ router.get('/:category/:filter', function(req, res, next) {
 //uses url as filter
 router.get('/:filter', function(req, res, next) {
     var db = req.db;
-    console.log(req);
+    console.log("filter foodlist get");
     var collection = db.collection('nut');
     //concatenation forces the req.params.filter to resolve before the where
-    foodItem.find({ $where: "this.Short_Desc.indexOf('"+req.params.filter.toUpperCase()+"') > -1"}, function(e,docs){
-        console.log(e);
+    foodItem.find({ $where: "this.Short_Desc.indexOf('"+req.params.filter.toUpperCase()+"') > -1"}, { _id: 0}, function(e,docs){
         res.render('foodlist', {
             "foodlist" : docs
         });
