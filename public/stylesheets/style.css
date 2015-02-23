@@ -9,16 +9,25 @@ a {
 
 ul#items {
   height: 400px;
-  width:500px;
+  width: 500px;
   overflow-y: scroll;
 }
+
+div#main {
+  width: 600px;
+  float:left;
+}
+.chart {
+  float: right;
+}
+
 
 .chart rect {
   fill: steelblue;
 }
 
 .chart text {
-  fill: white;
+  fill: black;
   font: 10px sans-serif;
   text-anchor: end;
 }
@@ -28,7 +37,7 @@ ul#items {
 }
 
 .bar:hover {
-  fill: brown;
+  fill: red;
 }
 
 .axis {
