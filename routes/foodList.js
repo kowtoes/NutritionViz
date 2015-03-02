@@ -2,6 +2,8 @@ var express = require('express');
 var mongoose = require('mongoose');
 var mongo = require('mongodb');
 var foodItem = require('../models/foodItem.js');
+//var jsdom = require("jsdom");
+//$ = require("jquery")(jsdom.jsdom().createWindow());
 var router = express.Router();
 
 //handles filter queries from textbox
@@ -45,9 +47,11 @@ router.get('/:filter', function(req, res, next) {
     var collection = db.collection('nut');
     //concatenation forces the req.params.filter to resolve before the where
     foodItem.find({ $where: "this.Short_Desc.indexOf('"+req.params.filter.toUpperCase()+"') > -1"}, { _id: 0}, function(e,docs){
+        res.cookie('prevData', docs);
         res.render('foodlist', {
             "foodlist" : docs
         });
+
     });
 });
 

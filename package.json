@@ -16,7 +16,6 @@
     "mongodb": "*",
     "monk": "*",
     "mongoose": "*",
-    "jquery": "*",
     "connect": "*"
   }
 }
