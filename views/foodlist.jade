@@ -21,11 +21,13 @@ block content
         li: a(href='/foodlist/Chocolate') Chocolate
         li: a(href='/foodlist/Milk') Milk
         li: a(href='/foodlist/Cheese') Cheese
+      div#tree
     svg.chart
     script(src="http://d3js.org/d3.v3.min.js")
     script(src="/scripts/jquery-2.1.3.js")
     script(src="/scripts/jquery-ui.js")
     script(src="/scripts/jquery.cookie.js")
+    script(src="/scripts/jstree.min.js")
     script.
       //get json from jade
       var foodList = [#{foodlist}];
@@ -36,6 +38,30 @@ block content
       "Thiamin", "Ribofl", "Niacin", "Vit_C", "FA_Sat","FA_Mono","FA_Poly", "Choles", "GmWt_1", "Refuse%"];
       // 28 entries total
       var yvalues = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      var majorGroups = ["Dairy and Egg", "Fruit, Nut and Vegetable", "Processed Foods", "Fats and Oils",
+                         "Meat and Fish", "Soups, Sauces, and Gravies", "Starches", "Beverages"]
+      var subGroups = ["Dairy and Egg Products", "Spices and Herbs", "Baby Foods", "Fats and Oils",
+            "Poultry Products", "Soups, Sauces, and Gravies", "Sausages and Luncheon Meats",
+            "Breakfast Cereals", "Fruits and Fruit Juices", "Pork Products", "Vegetables and Vegetable Products",
+            "Nut and Seed Products", "Beef Products", "Beverages", "Finfish and Shellfish Products",
+            "Legumes and Legume Products", "Lamb, Veal, and Game Products", "Baked Products", "Snacks and Sweets",
+            "Cereal Grains and Pasta", "Fast Foods", "Meals, Entrees, and Sidedishes"];
+
+      function contains(a, obj) {
+        var i = a.length;
+        while (i--) {
+           if (a[i] === obj) {
+               return true;
+           }
+        }
+        return false;
+      }
+
+
+
+
+
+
       //iterate through each nutritional food item
       for (item in foodList) {
         var x = 0;
@@ -88,6 +114,44 @@ block content
         if ($.cookie('currData') !== relativeAveragesFullSet)
             $.cookie('prevData' , $.cookie('currData'));
         $.cookie('currData' , relativeAveragesFullSet);
+        $('#tree').jstree({ 'core' : {
+          'data' : [
+             { "id" : "Dairy and Egg", "parent" : "#", "text" : "Dairy and Egg", 'state' : { 'opened' : true}},
+             { "id" : "Fruit, Nut and Vegetable", "parent" : "#", "text" : "Fruit, Nut and Vegetable" , 'state' : { 'opened' : true}},
+             { "id" : "Processed Foods", "parent" : "#", "text" : "Processed Foods" , 'state' : { 'opened' : true}},
+             { "id" : "Fats and Oils", "parent" : "#", "text" : "Fats and Oils" , 'state' : { 'opened' : true}},
+             { "id" : "Meat and Fish", "parent" : "#", "text" : "Meat and Fish" , 'state' : { 'opened' : true}},
+             { "id" : "Soups, Sauces, and Gravies", "parent" : "#", "text" : "Soups, Sauces, and Gravies" , 'state' : { 'opened' : true}},
+             { "id" : "Starches", "parent" : "#", "text" : "Starches", 'state' : { 'opened' : true} },
+             { "id" : "Beverages", "parent" : "#", "text" : "Beverages", 'state' : { 'opened' : true} },
+
+             //subs start here
+             { "id" : "Dairy and Egg Products", "parent" : "Dairy and Egg", "text" : "Dairy and Egg Products" },
+             { "id" : "Spices and Herbs", "parent" : "Fruit, Nut and Vegetable", "text" : "Spices and Herbs" },
+             { "id" : "Baby Foods", "parent" : "Processed Foods", "text" : "Baby Foods" },
+             { "id" : "Fats and Oils2", "parent" : "Fats and Oils", "text" : "Fats and Oils" },
+             { "id" : "Poultry Products", "parent" : "Meat and Fish", "text" : "Poultry Products" },
+             { "id" : "Soups, Sauces, and Gravies2", "parent" : "Soups, Sauces, and Gravies", "text" : "Soups, Sauces, and Gravies" },
+             { "id" : "Sausages and Luncheon Meats", "parent" : "Meat and Fish", "text" : "Sausages and Luncheon Meats" },
+             { "id" : "Breakfast Cereals", "parent" : "Starches", "text" : "Breakfast Cereals" },
+             { "id" : "Fruits and Fruit Juices", "parent" : "Fruit, Nut and Vegetable", "text" : "Fruits and Fruit Juices" },
+             { "id" : "Fruit, Nut and Vegetable2", "parent" : "Fruit, Nut and Vegetable", "text" : "Fruit, Nut and Vegetable" },
+             { "id" : "Pork Products", "parent" : "Meat and Fish", "text" : "Pork Products" },
+             { "id" : "Vegetables and Vegetable Products", "parent" : "Fruit, Nut and Vegetable", "text" : "Vegetables and Vegetable Products" },
+             { "id" : "Nut and Seed Products", "parent" : "Fruit, Nut and Vegetable", "text" : "Nut and Seed Products" },
+             { "id" : "Beef Products", "parent" : "Meat and Fish", "text" : "Beef Products" },
+             { "id" : "Beverages2", "parent" : "Beverages", "text" : "Beverages" },
+             { "id" : "Finfish and Shellfish Products", "parent" : "Meat and Fish", "text" : "Finfish and Shellfish Products" },
+             { "id" : "Legumes and Legume Products", "parent" : "Fruit, Nut and Vegetable", "text" : "Legumes and Legume Products" },
+             { "id" : "Lamb, Veal, and Game Products", "parent" : "Meat and Fish", "text" : "Lamb, Veal, and Game Products" },
+             { "id" : "Baked Products", "parent" : "Processed Foods", "text" : "Baked Products" },
+             { "id" : "Snacks and Sweets", "parent" : "Processed Foods", "text" : "Snacks and Sweets" },
+             { "id" : "Cereal Grains and Pasta", "parent" : "Starches", "text" : "Cereal Grains and Pasta" },
+             { "id" : "Fast Foods", "parent" : "Processed Foods", "text" : "Fast Foods" },
+             { "id" : "Meals, Entrees, and Sidedishes", "parent" : "Processed Foods", "text" : "Meals, Entrees, and Sidedishes" }
+          ]
+        } });
+
       });
       var margin = {top: 20, right: 20, bottom: 30, left: 70},
       width = 720 - margin.left - margin.right,
