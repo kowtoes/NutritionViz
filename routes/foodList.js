@@ -40,6 +40,8 @@ router.get('/:category/:filter', function(req, res, next) {
         });
     });
 });
+
+
 //uses url as filter
 router.get('/:filter', function(req, res, next) {
     var db = req.db;

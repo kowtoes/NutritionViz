@@ -7,7 +7,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var foodItems = require('./models/foodItem.js');
 var foodList = require('./routes/foodList');
-var d3 = require("d3");
 //mongo combo
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
