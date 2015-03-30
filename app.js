@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var foodItems = require('./models/foodItem.js');
 var foodList = require('./routes/foodList');
+var category = require('./routes/category');
 //mongo combo
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
@@ -47,6 +48,7 @@ app.use(function(req,res,next){
 //start routing
 app.use('/', routes);
 app.use('/foodList', foodList);
+app.use('/category', category);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

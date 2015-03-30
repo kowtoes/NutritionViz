@@ -22,4 +22,20 @@ router.get('/foodlist', function(req, res) {
     });
 });
 
+/* GET category page. */
+router.get('/category', function(req, res) {
+    var db = req.db;
+    var collection = db.collection('nut');
+    console.log("main category get");
+    foodItem.find( {}, { _id: 0},function(e,docs){
+
+        res.render('category', {
+            "category" : docs
+        });
+    });
+});
+
+
+
+
 module.exports = router;
