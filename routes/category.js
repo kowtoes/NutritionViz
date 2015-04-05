@@ -10,34 +10,38 @@ var router = express.Router();
 router.get('/search', function(req, res, next) {
     var db = req.db;
     var collection = db.collection('nut');
-    console.log(req);
-    //concatenation forces the req.query.filter to resolve before the where
-    //otherwise always returns false
-    //limits results to items which contain the query
-    foodItem.find({ $where: "this.Short_Desc.indexOf('"+req.query.filter.toUpperCase()+"') > -1"}, { _id: 0}, function(e,docs){
-        console.log(e);
-        res.render('category', {
-            "category" : docs
-        });
-    });
+    var val = req.query.filter;
+  var sort_order = {};
+  sort_order[val] = 1;
+  //concatenation forces the req.query.filter to resolve before the where
+  //otherwise always returns false
+  //limits results to items which contain the query
+  foodItem.find( {}, { _id: 0} ,function(e,docs){
+
+      res.render('category', {
+          "category" : docs
+      });
+  }).sort( sort_order );
 });
 
 //handles filter queries from textbox
 router.get('/sort/:filter', function(req, res, next) {
     var db = req.db;
     var collection = db.collection('nut');
-    var sorted = req.params.filter;
-    console.log(req);
+    var val = req.params.filter;
+    var sort_order = {};
+    sort_order[val] = 1;
+
+    console.log(sort_order);
     //concatenation forces the req.query.filter to resolve before the where
     //otherwise always returns false
     //limits results to items which contain the query
-
-    foodItem.find( {}, { _id: 0, Water : 1},function(e,docs){
+    foodItem.find( {}, { _id: 0} ,function(e,docs){
 
         res.render('category', {
             "category" : docs
         });
-    });
+    }).sort( sort_order );
 });
 
 

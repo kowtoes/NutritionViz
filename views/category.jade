@@ -84,7 +84,7 @@ block content
 
       $(document).ready(function() {
         $("input#foodFilter").autocomplete({
-          source: foodNames
+          source: yAxisLabels
         });
 
 
@@ -92,6 +92,11 @@ block content
 
 
       });
+
+      var yAxisLabels = ["Water","Energ_Kcal", "Protein", "Tot_Lipid", "Carbohydrt", "Fiber_TD", "Ash",
+      "Calcium", "Phosphorus", "Iron", "Sodium", "Potassium", "Magnesium", "Zinc", "Copper", "Vit_A", "Vit_E",
+      "Thiamin", "Riboflavin", "Niacin", "Vit_C", "FA_Sat","FA_Mono","FA_Poly", "Cholestrl", "GmWt_1", "Refuse_Pct"];
+
 
       var margin = {top: 20, right: 20, bottom: 30, left: 70},
       width = 720 - margin.left - margin.right,
