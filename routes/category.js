@@ -10,7 +10,7 @@ var router = express.Router();
 router.get('/search', function(req, res, next) {
     var db = req.db;
     var collection = db.collection('nut');
-    var val = req.query.filter;
+    var val = ""+req.query.filter;
   var sort_order = {};
   sort_order[val] = 1;
   //concatenation forces the req.query.filter to resolve before the where
@@ -19,8 +19,7 @@ router.get('/search', function(req, res, next) {
   foodItem.find( {}, { _id: 0} ,function(e,docs){
 
       res.render('category', {
-          "category" : docs
-      });
+          "category" : docs, "property" : val});
   }).sort( sort_order );
 });
 
