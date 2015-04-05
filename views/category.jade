@@ -130,7 +130,7 @@ block content
             .data(cumSums)
           .enter().append("rect")
             .attr("class", "bar")
-            .attr("y", function(d, i) { return i * (height) / cumSums.length; })
+            .attr("y", function(d, i) { return height - (i * (height) / cumSums.length); })
             .attr("width", function(d) {return x(d)})
             .attr("height", y.rangeBand())
             .text(function(d) { return d; });
