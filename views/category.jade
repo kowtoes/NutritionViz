@@ -35,21 +35,12 @@ block content
 
 
       //number based categorys from json, besides NDB_No, 27 entries
-      var yAxisLabels = ["Water","Kcal", "Protein", "Tot_Fat", "Carbs", "Fiber", "Ash",
-      "Calcium", "Phos", "Iron", "Sodium", "Potas", "Magnes", "Zinc", "Copper", "Vit_A", "Vit_E",
-      "Thiamin", "Ribofl", "Niacin", "Vit_C", "FA_Sat","FA_Mono","FA_Poly", "Choles", "GmWt_1", "Refuse%"];
+      var yAxisLabels = ["0%", "5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%",
+        "45%", "50%", "55%", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%",];
       // 28 entries total
       var yvalues = [];
       var y2values = [];
       var yMaxes = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-      var majorGroups = ["Dairy and Egg", "Fruit, Nut and Vegetable", "Processed Foods", "Fats and Oils",
-                         "Meat and Fish", "Soups, Sauces, and Gravies", "Starches", "Beverages"]
-      var subGroups = ["Dairy and Egg Products", "Spices and Herbs", "Baby Foods", "Fats and Oils",
-            "Poultry Products", "Soups, Sauces, and Gravies", "Sausages and Luncheon Meats",
-            "Breakfast Cereals", "Fruits and Fruit Juices", "Pork Products", "Vegetables and Vegetable Products",
-            "Nut and Seed Products", "Beef Products", "Beverages", "Finfish and Shellfish Products",
-            "Legumes and Legume Products", "Lamb, Veal, and Game Products", "Baked Products", "Snacks and Sweets",
-            "Cereal Grains and Pasta", "Fast Foods", "Meals, Entrees, and Sidedishes"];
 
       function contains(a, obj) {
         var i = a.length;
@@ -80,27 +71,16 @@ block content
       41.80646084337349, 155.8459002677344, 5.924866131191433]
       var averagesRaw = [];
       var cumSums = [];
-      for(var y = 1; y < 21; y++) {
+      for(var y = 1; y < y2values.length / 100; y++) {
         var sum = 0;
-        var frac = y * y2values.length / 20;
-        for (var x = (y - 1) * y2values.length; x < frac; x++) {
+        var frac = y * 100;
+        for (var x = (y - 1) * 100; x < frac; x++) {
           sum += y2values[x]
         }
-        cumSums.push(sum);
+        cumSums.push(sum / 100);
       }
       //remove NDB_No from array
-      averagesRaw = averagesRaw.slice(1);
-      var relativeAveragesFullSet = [];
-      for(var y = 0; y < averagesRaw.length; y++) {
-        relativeAveragesFullSet.push(parseFloat(Math.round(averagesRaw[y] / topLevelAverages[y] * 100) / 100).toFixed(2));
-      }
 
-      if($.cookie('prevData')) {
-            var oldSet = [];
-            for (var x = 0; x < relativeAveragesFullSet.length; x++) {
-                oldSet.push($.cookie('prevData').split(',')[x]);
-            }
-        }
 
       $(document).ready(function() {
         $("input#foodFilter").autocomplete({
@@ -115,15 +95,15 @@ block content
 
       var margin = {top: 20, right: 20, bottom: 30, left: 70},
       width = 720 - margin.left - margin.right,
-      height = 1000 - margin.top - margin.bottom;
+      height = 500 - margin.top - margin.bottom;
 
       var x = d3.scale.linear()
-          .domain([0, 100])
+          .domain([0, d3.max(cumSums)])
           .range([0, width]);
 
       var y = d3.scale.ordinal()
-          .domain(y2values)
-          .rangeRoundBands([0, height], 5);
+          .domain(yAxisLabels)
+          .rangeRoundBands([0, height], .1);
 
       var xAxis = d3.svg.axis()
           .scale(x)
@@ -141,38 +121,40 @@ block content
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+
+
+
+
+        var bar = svg.selectAll(".bar")
+            .data(cumSums)
+          .enter().append("rect")
+            .attr("class", "bar")
+            .attr("y", function(d, i) { return i * (height) / cumSums.length; })
+            .attr("width", function(d) {return x(d)})
+            .attr("height", y.rangeBand())
+            .text(function(d) { return d; });
+            /*var text = svg.selectAll(".text")
+                .data(cumSums)
+                .enter().append("text")
+                    .attr("class", "text")
+                    .attr("x", function(d) { return x(d); })
+                    .attr("y", function(d, i) { return 16 + i * (height) / cumSums.length; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d; }); */
+
+
         svg.append("g")
             .attr("class", "x axis")
             .call(xAxis)
-            .data(relativeAveragesFullSet)
+            .data(cumSums)
             .attr("transform", "translate(0 ," + height + ")");
 
 
         svg.append("g")
             .attr("class", "y axis")
             .call(yAxis)
-            .data(relativeAveragesFullSet);
-
-
-
-
-        var bar = svg.selectAll(".bar")
-            .data(relativeAveragesFullSet)
-          .enter().append("rect")
-            .attr("class", "bar")
-            .attr("y", function(d, i) { return i * (height / relativeAveragesFullSet.length); })
-            .attr("width", function(d) {return x(d)})
-            .attr("height", y.rangeBand())
-            .text(function(d) { return d; });
-            var text = svg.selectAll(".text")
-                .data(relativeAveragesFullSet)
-                .enter().append("text")
-                    .attr("class", "text")
-                    .attr("x", function(d) { return x(d); })
-                    .attr("y", function(d, i) { return 16 + i * (height / relativeAveragesFullSet.length); })
-                    .attr("dy", ".35em")
-                    .text(function(d) { return d; });
-
+            .data(cumSums);
 
         function type(d) {
           d.value = +d.value; // coerce to number
