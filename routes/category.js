@@ -22,6 +22,27 @@ router.get('/search', function(req, res, next) {
     });
 });
 
+//handles filter queries from textbox
+router.get('/sort/:filter', function(req, res, next) {
+    var db = req.db;
+    var collection = db.collection('nut');
+    var sorted = req.params.filter;
+    console.log(req);
+    //concatenation forces the req.query.filter to resolve before the where
+    //otherwise always returns false
+    //limits results to items which contain the query
+
+    foodItem.find( {}, { _id: 0, Water : 1},function(e,docs){
+
+        res.render('category', {
+            "category" : docs
+        });
+    });
+});
+
+
+
+
 
 //uses url as filter and category to filter
 router.get('/:cat/:filter', function(req, res, next) {
