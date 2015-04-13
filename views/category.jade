@@ -68,7 +68,7 @@ block content
 
 
       //change this to vary bar height
-      var compressor = 10;
+      var compressor =  1;
 
 
 
@@ -103,7 +103,7 @@ block content
 
       var margin = {top: 20, right: 20, bottom: 30, left: 70},
       width = 720 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+      height = 900 - margin.top - margin.bottom;
 
       var x = d3.scale.linear()
           .domain([0, d3.max(cumSums)])
@@ -140,7 +140,7 @@ block content
             .attr("class", "bar")
             .attr("y", function(d) { return height - x(d); })
             .attr("x", function(d, i) { return (i * (width) / cumSums.length); })
-            .attr("width",  y.rangeBand())
+            .attr("width",  (width) / cumSums.length)
             .attr("height", function(d) { return x(d); })
             .text(function(d) { return d; });
             /*var text = svg.selectAll(".text")

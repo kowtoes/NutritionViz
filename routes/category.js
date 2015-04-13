@@ -11,17 +11,14 @@ router.get('/search', function(req, res, next) {
     var db = req.db;
     var collection = db.collection('nut');
     var val = ""+req.query.filter;
-  var sort_order = {};
-  sort_order[val] = 1;
-  //concatenation forces the req.query.filter to resolve before the where
-  //otherwise always returns false
-  //limits results to items which contain the query
-  foodItem.find( {}, { _id: 0} ,function(e,docs){
-
-      res.render('category', {
-          "category" : docs, "property" : val});
-  }).sort( sort_order );
-});
+    //concatenation forces the req.query.filter to resolve before the where
+    //otherwise always returns false
+    //limits results to items which contain the query
+    foodItem.find( {}, { _id: 0} ,function(e,docs){
+        res.render('category', {
+        "category" : docs, "property" : val});
+      })
+    });
 
 //handles filter queries from textbox
 router.get('/sort/:filter', function(req, res, next) {
