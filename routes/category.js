@@ -21,7 +21,7 @@ router.get('/search', function(req, res, next) {
 
       res.render('category', {
           "category" : docs, "property" : val});
-  })
+  }).sort( sort_order );
 });
 
 

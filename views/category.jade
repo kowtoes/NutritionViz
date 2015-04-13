@@ -27,86 +27,85 @@ block content
       var foodNames = [];
 
 
-      for (var paramInd = 0; paramInd < param.split(",").length; paramInd++) {
-        //number based categories from json, besides NDB_No, 27 entries
-        var yAxisLabels = ["0%", "5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%",
-          "45%", "50%", "55%", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%",];
-        // 28 entries total
-        var yvalues = [];
-        var y2values = [];
-        var yMaxes = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
-        category.sort(function(a, b) {
-          if(a[param.split(",")[paramInd]] == b[param.split(",")[paramInd]])
-              return 0;
-          if(a[param.split(",")[paramInd]] < b[param.split(",")[paramInd]])
-              return -1;
-          if(a[param.split(",")[paramInd]] > b[param.split(",")[paramInd]])
-              return 1;
-        });
+      //number based categorys from json, besides NDB_No, 27 entries
+      var yAxisLabels = ["0%", "5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%",
+        "45%", "50%", "55%", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%",];
+      // 28 entries total
+      var yvalues = [];
+      var y2values = [];
+      var yMaxes = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
-
-
-
-        //iterate through each nutritional food item
-        for (var x = 0; x < category.length; x++) {
-          y2values.push(category[x][param.split(",")[paramInd]]);
+      function contains(a, obj) {
+        var i = a.length;
+        while (i--) {
+           if (a[i] === obj) {
+               return true;
+           }
         }
-        //accum sums
-        var cumSums = [];
+        return false;
+      }
+
+      category.sort(function(a, b) {
+        if(a[param] == b[param])
+            return 0;
+        if(a[param] < b[param])
+            return -1;
+        if(a[param] > b[param])
+            return 1;
+      });
 
 
-        //change this to vary bar height
-        var compressor = 1;
 
 
-
-        for(var y = 1; y < y2values.length / compressor; y++) {
-          var sum = 0;
-          var frac = y * compressor;
-          for (var x = (y - 1) * compressor; x < frac; x++) {
-            sum += y2values[x]
-          }
-          cumSums.push(sum / compressor);
-        }
-        //remove NDB_No from array
-
+      //iterate through each nutritional food item
+      for (var x = 0; x < category.length; x++) {
+        y2values.push(category[x][param]);
+      }
+      //compute the average of each category
+      var averagesRaw = [];
+      var cumSums = [];
 
 
       //change this to vary bar height
       var compressor =  1;
 
 
-
-        var yAxisLabel = ["Water","Energ_Kcal", "Protein", "Tot_Lipid", "Carbohydrt", "Fiber_TD", "Ash",
-        "Calcium", "Phosphorus", "Iron", "Sodium", "Potassium", "Magnesium", "Zinc", "Copper", "Vit_A", "Vit_E",
-        "Thiamin", "Riboflavin", "Niacin", "Vit_C", "FA_Sat","FA_Mono","FA_Poly", "Cholestrl", "GmWt_1", "Refuse_Pct"];
-
-
-        var margin = {top: 20, right: 20, bottom: 30, left: 70},
-        width = 300 - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom;
-
-        var x = d3.scale.linear()
-            .domain([0, d3.max(cumSums)])
-            .range([0, width]);
-
-        var y = d3.scale.ordinal()
-
-            .domain(yAxisLabels)
-            .rangeRoundBands([ height, 0], .1);
-
-
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
-
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
+      //change this to vary bar height
+      var compressor = 10;
 
 
 
+      for(var y = 1; y < y2values.length / compressor; y++) {
+        var sum = 0;
+        var frac = y * compressor;
+        for (var x = (y - 1) * compressor; x < frac; x++) {
+          sum += y2values[x]
+        }
+        cumSums.push(sum / compressor);
+      }
+      //remove NDB_No from array
+
+
+      $(document).ready(function() {
+        $("input#foodFilter").autocomplete({
+          source: yAxisLabel
+        });
+
+        for (var x =0; x < yAxisLabel.length; x++) {
+          $('#cates').append("<li><a href = /category/search?filter=" + yAxisLabel[x] + ">" +  yAxisLabel[x] + " </a></li>");
+        }
+
+
+
+      });
+
+      var yAxisLabel = ["Water","Energ_Kcal", "Protein", "Tot_Lipid", "Carbohydrt", "Fiber_TD", "Ash",
+      "Calcium", "Phosphorus", "Iron", "Sodium", "Potassium", "Magnesium", "Zinc", "Copper", "Vit_A", "Vit_E",
+      "Thiamin", "Riboflavin", "Niacin", "Vit_C", "FA_Sat","FA_Mono","FA_Poly", "Cholestrl", "GmWt_1", "Refuse_Pct"];
+
+
+<<<<<<< HEAD
         var svg = d3.select("body").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -117,65 +116,56 @@ block content
       width = 720 - margin.left - margin.right,
       height = 900 - margin.top - margin.bottom;
 
+=======
+      var margin = {top: 20, right: 20, bottom: 30, left: 70},
+      width = 720 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+>>>>>>> parent of af5cc53... multiple graph support enabled
+
+      var x = d3.scale.linear()
+          .domain([0, d3.max(cumSums)])
+          .range([0, width]);
+
+      var y = d3.scale.ordinal()
+          .domain(yAxisLabels)
+          .rangeRoundBands([ height, 0], .1);
+
+      var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom");
+
+      var yAxis = d3.svg.axis()
+          .scale(y)
+          .orient("left");
+
+
+
+      var svg = d3.select("body").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
 
 
 
 
-          var bar = svg.selectAll(".bar")
-              .data(cumSums)
-            .enter().append("rect")
-              .attr("class", "bar")
-              .attr("y", function(d) { return height - x(d); })
-              .attr("x", function(d, i) { return (i * (width) / cumSums.length); })
-              .attr("width",  (width) / cumSums.length)
-              .attr("height", function(d) { return x(d); })
-              .text(function(d) { return d; });
-              /*var text = svg.selectAll(".text")
-                  .data(cumSums)
-                  .enter().append("text")
-                      .attr("class", "text")
-                      .attr("x", function(d) { return x(d); })
-                      .attr("y", function(d, i) { return 16 + i * (height) / cumSums.length; })
-                      .attr("dy", ".35em")
-                      .text(function(d) { return d; }); */
+<<<<<<< HEAD
 
-
-          svg.append("g")
-              .attr("class", "x axis")
-              .call(xAxis)
-              .data(cumSums)
-              .attr("transform", "translate(0 ," + height + ")");
-
-
-          svg.append("g")
-              .attr("class", "y axis")
-              .call(yAxis)
-              .data(cumSums);
-
-          svg.append("text")
-              .attr("x", (width / 2))
-              .attr("y", 10 - (margin.top / 2))
-              .attr("text-anchor", "middle")
-              .style("font-size", "16px")
-              .style("text-decoration", "underline")
-              .text(param.split(",")[paramInd]);
-
-          function type(d) {
-            d.value = +d.value; // coerce to number
-            return d;
-          }
-        }
-
-
+=======
+>>>>>>> parent of af5cc53... multiple graph support enabled
         var bar = svg.selectAll(".bar")
             .data(cumSums)
           .enter().append("rect")
             .attr("class", "bar")
             .attr("y", function(d) { return height - x(d); })
             .attr("x", function(d, i) { return (i * (width) / cumSums.length); })
+<<<<<<< HEAD
             .attr("width",  (width) / cumSums.length)
+=======
+            .attr("width",  y.rangeBand())
+>>>>>>> parent of af5cc53... multiple graph support enabled
             .attr("height", function(d) { return x(d); })
             .text(function(d) { return d; });
             /*var text = svg.selectAll(".text")
@@ -186,18 +176,25 @@ block content
                     .attr("y", function(d, i) { return 16 + i * (height) / cumSums.length; })
                     .attr("dy", ".35em")
                     .text(function(d) { return d; }); */
+<<<<<<< HEAD
+
+=======
+>>>>>>> parent of af5cc53... multiple graph support enabled
 
 
-        //setup the autocomplete on query and create list of categories
-        $(document).ready(function() {
-          $("input#foodFilter").autocomplete({
-            source: yAxisLabel
-          });
-
-          for (var x =0; x < yAxisLabel.length; x++) {
-            $('#cates').append("<li><a href = /category/search?filter=" + yAxisLabel[x] + ">" +  yAxisLabel[x] + " </a></li>");
-          }
+        svg.append("g")
+            .attr("class", "x axis")
+            .call(xAxis)
+            .data(cumSums)
+            .attr("transform", "translate(0 ," + height + ")");
 
 
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .data(cumSums);
 
-        });
+        function type(d) {
+          d.value = +d.value; // coerce to number
+          return d;
+        }
